@@ -1,5 +1,6 @@
 package com.example.movietmdbapp.core.presentation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -18,7 +19,7 @@ fun MainScreen() {
         modifier = Modifier.fillMaxSize(),
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { innerPadding ->
-        Surface(modifier = Modifier.padding(innerPadding)) {
+        Box(modifier = Modifier.padding(innerPadding)) {
             NavigationGraph(navController = navController)
         }
     }

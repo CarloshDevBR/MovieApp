@@ -6,9 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.room.util.query
 import com.example.movietmdbapp.search_movie_feature.domain.usecases.GetMovieSearchUseCase
-import com.example.movietmdbapp.search_movie_feature.presentation.components.MovieSearchEvent
 import com.example.movietmdbapp.search_movie_feature.presentation.state.MovieSearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

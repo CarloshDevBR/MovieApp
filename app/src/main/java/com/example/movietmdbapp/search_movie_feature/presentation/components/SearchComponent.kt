@@ -1,4 +1,4 @@
-package com.example.movietmdbapp.search_movie_feature.presentation
+package com.example.movietmdbapp.search_movie_feature.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -20,7 +20,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.movietmdbapp.R
-import com.example.movietmdbapp.search_movie_feature.presentation.components.MovieSearchEvent
+import com.example.movietmdbapp.search_movie_feature.presentation.MovieSearchEvent
+import com.example.movietmdbapp.ui.theme.black
 import com.example.movietmdbapp.ui.theme.white
 
 @Composable
@@ -64,11 +65,13 @@ fun SearchComponent(
             focusedPlaceholderColor = white,
             unfocusedPlaceholderColor = white,
             focusedTrailingIconColor = white,
-            unfocusedTrailingIconColor = white
+            unfocusedTrailingIconColor = white,
+            unfocusedContainerColor = black,
+            focusedContainerColor = black
         ),
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 60.dp)
+            .heightIn(min = 60.dp),
     )
 }
 
