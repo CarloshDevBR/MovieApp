@@ -8,11 +8,10 @@ import com.example.movietmdbapp.core.util.toBackDropUrl
 import com.example.movietmdbapp.movie_detail_feature.domain.source.MovieDetailsRemoteDataSource
 import javax.inject.Inject
 
-
 class MovieDetailsRemoteDataSourceImpl @Inject constructor(
     private val service: MovieService
 ) : MovieDetailsRemoteDataSource {
-    override suspend fun getMovieDetail(movieId: Int): MovieDetails {
+    override suspend fun getMovieDetails(movieId: Int): MovieDetails {
         val response = service.getMovie(movieId)
 
         val genres = response.genres.map { it.name }
