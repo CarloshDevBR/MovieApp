@@ -3,6 +3,7 @@ package com.example.movietmdbapp.core.presentation.navigation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -11,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.movietmdbapp.ui.theme.black
+import com.example.movietmdbapp.ui.theme.white
 import com.example.movietmdbapp.ui.theme.yellow
 
 @Composable
@@ -37,11 +39,19 @@ fun BottomNavigationBar(navController: NavController) {
                         launchSingleTop = true
                     }
                 },
+                colors = NavigationBarItemColors(
+                    selectedIndicatorColor = yellow,
+                    selectedIconColor = white,
+                    selectedTextColor = yellow,
+                    unselectedIconColor = yellow,
+                    unselectedTextColor = yellow,
+                    disabledIconColor = black,
+                    disabledTextColor = black
+                ),
                 icon = {
                     Icon(
                         imageVector = destination.icon,
                         contentDescription = "",
-                        tint = yellow
                     )
                 },
                 label = {
