@@ -9,9 +9,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.movietmdbapp.core.util.Constants
 import com.example.movietmdbapp.movie_detail_feature.presentation.MovieDetailViewModel
+import com.example.movietmdbapp.movie_favorite_feature.presentation.MovieFavoriteScreen
+import com.example.movietmdbapp.movie_favorite_feature.presentation.MovieFavoriteViewModel
 import com.example.movietmdbapp.movie_popular_feature.presentation.MoviePopularScreen
 import com.example.movietmdbapp.movie_popular_feature.presentation.MoviePopularViewModel
-import com.example.movietmdbapp.search_movie_feature.presentation.MovieDetailScreen
+import com.example.movietmdbapp.movie_detail_feature.presentation.MovieDetailScreen
 import com.example.movietmdbapp.search_movie_feature.presentation.MovieSearchScreen
 import com.example.movietmdbapp.search_movie_feature.presentation.MovieSearchViewModel
 
@@ -50,7 +52,15 @@ fun NavigationGraph(navController: NavHostController) {
         }
 
         composable(route = BottomNavItem.MovieFavorite.route) {
+            val viewModel: MovieFavoriteViewModel = hiltViewModel()
+            val uiState = viewModel.uiState
 
+            MovieFavoriteScreen(
+                uiState = uiState,
+                navigateToDetailMovie = { movieId ->
+                    navController.navigate(BottomNavItem.MovieDetail.passMovieId(movieId))
+                }
+            )
         }
 
         composable(
@@ -64,12 +74,16 @@ fun NavigationGraph(navController: NavHostController) {
         ) {
             val viewModel: MovieDetailViewModel = hiltViewModel()
             val uiState = viewModel.uiState
+            val onAddFavorite = viewModel::onAddFavorite
+            val checkedFavorite = viewModel::checkedFavorite
             val getMovieDetail = viewModel::getMovieDetail
 
             MovieDetailScreen(
                 id = it.arguments?.getInt(Constants.ARGUMENTS.MOVIE_DETAIL_ARGUMENT_KEY),
                 uiState = uiState,
-                getMovieDetail = getMovieDetail
+                onAddFavorite = onAddFavorite,
+                checkedFavorite = checkedFavorite,
+                getMovieDetail = getMovieDetail,
             )
         }
     }

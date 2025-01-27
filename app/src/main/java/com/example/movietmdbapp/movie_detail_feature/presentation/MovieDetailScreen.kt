@@ -1,4 +1,4 @@
-package com.example.movietmdbapp.search_movie_feature.presentation
+package com.example.movietmdbapp.movie_detail_feature.presentation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movietmdbapp.R
-import com.example.movietmdbapp.movie_detail_feature.presentation.MovieDetailEvent
+import com.example.movietmdbapp.core.domain.model.Movie
 import com.example.movietmdbapp.movie_detail_feature.presentation.components.MovieDetailContent
 import com.example.movietmdbapp.movie_detail_feature.presentation.state.MovieDetailState
 import com.example.movietmdbapp.ui.theme.black
@@ -23,6 +23,8 @@ import com.example.movietmdbapp.ui.theme.white
 fun MovieDetailScreen(
     id: Int?,
     uiState: MovieDetailState,
+    onAddFavorite: (Movie) -> Unit,
+    checkedFavorite: (MovieDetailEvent.CheckedFavorite) -> Unit,
     getMovieDetail: (MovieDetailEvent.GetMovieDetail) -> Unit,
 ) {
     val pagingMovieSimilar = uiState.results.collectAsLazyPagingItems()
@@ -30,6 +32,8 @@ fun MovieDetailScreen(
     LaunchedEffect(key1 = true) {
         if (id != null) {
             getMovieDetail(MovieDetailEvent.GetMovieDetail(id))
+
+            checkedFavorite(MovieDetailEvent.CheckedFavorite(id))
         }
     }
 
@@ -55,8 +59,8 @@ fun MovieDetailScreen(
                 isLoading = uiState.isLoading,
                 isError = uiState.error,
                 iconColor = uiState.iconColor,
-                onAddFavorite = {
-
+                onAddFavorite = { movie ->
+                    onAddFavorite(movie)
                 },
                 modifier = Modifier.padding(paddingValues)
             )
