@@ -6,7 +6,7 @@
     <string name="vote_average">"Média (votos)"</string>
     <string name="duration">Duração</string>
 
-    <string name="duration_minutes">min</string>
+    <string name="duration_minutes">%1$s min</string>
     <string name="movies_similar">Filmes Similares</string>
     <string name="description">Descrição</string>
 
