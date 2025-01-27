@@ -4,5 +4,4 @@
     <style name="Theme.MovieTMDBApp" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/black</item>
     </style>
-
 </resources>
