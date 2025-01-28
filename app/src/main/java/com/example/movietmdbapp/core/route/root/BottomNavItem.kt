@@ -1,12 +1,10 @@
-package com.example.movietmdbapp.core.presentation.navigation
+package com.example.movietmdbapp.core.route.root
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.movietmdbapp.core.util.Constants
 
 sealed class BottomNavItem(val title: String, val icon: ImageVector, val route: String) {
     data object MoviePopular : BottomNavItem(
@@ -26,12 +24,4 @@ sealed class BottomNavItem(val title: String, val icon: ImageVector, val route: 
         icon = Icons.Default.Favorite,
         route = "movie_favorite_screen"
     )
-
-    data object MovieDetail : BottomNavItem(
-        title = "Detalhes",
-        icon = Icons.Default.Details,
-        route = "movie_detail_destination?${Constants.ARGUMENTS.MOVIE_DETAIL_ARGUMENT_KEY}={${Constants.ARGUMENTS.MOVIE_DETAIL_ARGUMENT_KEY}}"
-    ) {
-        fun passMovieId(movieId: Int) = "movie_detail_destination?${Constants.ARGUMENTS.MOVIE_DETAIL_ARGUMENT_KEY}=$movieId"
-    }
 }

@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.movietmdbapp.core.route.root.BottomNavItem
 import com.example.movietmdbapp.ui.theme.black
 import com.example.movietmdbapp.ui.theme.white
 import com.example.movietmdbapp.ui.theme.yellow
@@ -63,6 +64,13 @@ fun BottomNavigationBar(navController: NavController) {
             )
         }
     }
+}
+
+@Composable
+fun currentRoute(navController: NavController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    return navBackStackEntry?.destination?.route
 }
 
 @Preview

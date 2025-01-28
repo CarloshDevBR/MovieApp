@@ -14,14 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.example.movietmdbapp.R
+import com.example.movietmdbapp.core.presentation.components.common.AsyncImageUrl
 
 @Composable
 fun MovieItem(
@@ -50,20 +46,12 @@ fun MovieItem(
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.elevatedCardElevation(8.dp)
         ) {
-            AsyncImage(
+            AsyncImageUrl(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black)
                     .clip(RoundedCornerShape(8.dp)),
-                model = ImageRequest
-                    .Builder(LocalContext.current)
-                    .data(imageUrl)
-                    .crossfade(true)
-                    .error(R.drawable.ic_error_image)
-                    .placeholder(R.drawable.ic_placeholder)
-                    .build(),
-                contentDescription = "",
-                contentScale = ContentScale.FillHeight
+                imageUrl = imageUrl,
             )
         }
     }
@@ -72,5 +60,10 @@ fun MovieItem(
 @Preview
 @Composable
 private fun MovieItemPreview() {
-    MovieItem(voteAvarege = 6.2, imageUrl = "", id = 2, onClick = {})
+    MovieItem(
+        id = 2,
+        voteAvarege = 6.2,
+        imageUrl = "",
+        onClick = {}
+    )
 }

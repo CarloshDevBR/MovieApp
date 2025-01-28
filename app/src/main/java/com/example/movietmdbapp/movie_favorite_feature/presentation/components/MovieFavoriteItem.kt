@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Card
@@ -13,17 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.example.movietmdbapp.R
 import com.example.movietmdbapp.core.domain.model.Movie
+import com.example.movietmdbapp.core.presentation.components.common.AsyncImageUrl
 import com.example.movietmdbapp.ui.theme.black
 import com.example.movietmdbapp.ui.theme.white
 
@@ -51,14 +46,8 @@ fun MovieFavoriteItem(
                     .fillMaxWidth()
                     .height(200.dp)
             ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(movie.imageUrl)
-                        .crossfade(true)
-                        .error(R.drawable.ic_error_image)
-                        .placeholder(R.drawable.ic_placeholder)
-                        .build(),
-                    contentDescription = "",
+                AsyncImageUrl(
+                    imageUrl = movie.imageUrl,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
                 )
