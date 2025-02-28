@@ -2,6 +2,7 @@ package com.example.movietmdbapp.core.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -55,10 +56,10 @@ fun NavigationGraph(navController: NavHostController) {
 
         composable(route = BottomNavItem.MovieFavorite.route) {
             val viewModel: MovieFavoriteViewModel = hiltViewModel()
-            val uiState = viewModel.uiState
+            val uiState = viewModel.uiState.movies.collectAsStateWithLifecycle(initialValue = emptyList())
 
             MovieFavoriteScreen(
-                uiState = uiState,
+                movies = uiState.value,
                 navigateToDetailMovie = { movieId ->
                     navController.navigate(DetailScreenNav.DetailScreen.passMovieId(movieId))
                 }

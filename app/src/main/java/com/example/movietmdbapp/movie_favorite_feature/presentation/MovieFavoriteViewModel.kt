@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.example.movietmdbapp.movie_favorite_feature.domain.usecase.GetMoviesFavoriteUseCase
 import com.example.movietmdbapp.movie_favorite_feature.presentation.state.MovieFavoriteState
@@ -25,9 +26,9 @@ class MovieFavoriteViewModel @Inject constructor(
 
     private fun fetch() {
         viewModelScope.launch {
-            getMoviesFavoriteUseCase.invoke().collectLatest { movies ->
-                uiState = uiState.copy(movies = movies)
-            }
+            val movies = getMoviesFavoriteUseCase.invoke()
+
+            uiState = uiState.copy(movies = movies)
         }
     }
 }

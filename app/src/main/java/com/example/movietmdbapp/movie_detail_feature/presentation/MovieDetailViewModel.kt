@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movietmdbapp.core.domain.model.Movie
+import com.example.movietmdbapp.core.domain.model.MovieDetails
 import com.example.movietmdbapp.core.util.Constants
 import com.example.movietmdbapp.core.util.ResultData
 import com.example.movietmdbapp.core.util.UtilFunctions
@@ -33,21 +34,22 @@ class MovieDetailViewModel @Inject constructor(
     var uiState by mutableStateOf(MovieDetailState())
         private set
 
-    private val movieId = savedStateHandle.get<Int>(key = Constants.ARGUMENTS.MOVIE_DETAIL_ARGUMENT_KEY)
+    private val movieId =
+        savedStateHandle.get<Int>(key = Constants.ARGUMENTS.MOVIE_DETAIL_ARGUMENT_KEY)
 
     init {
         movieId?.let { safeMovieId ->
-            checkedFavorite(MovieDetailEvent.CheckedFavorite(safeMovieId))
+            // checkedFavorite(MovieDetailEvent.CheckedFavorite(safeMovieId))
 
             getMovieDetail(MovieDetailEvent.GetMovieDetail(safeMovieId))
         }
     }
 
-    private fun getMovieDetail(getMovieDetail: MovieDetailEvent.GetMovieDetail) {
-        event(getMovieDetail)
+    private fun checkedFavorite(checkedFavorite: MovieDetailEvent.CheckedFavorite) {
+        event(checkedFavorite)
     }
 
-    private fun checkedFavorite(getMovieDetail: MovieDetailEvent.CheckedFavorite) {
+    private fun getMovieDetail(getMovieDetail: MovieDetailEvent.GetMovieDetail) {
         event(getMovieDetail)
     }
 

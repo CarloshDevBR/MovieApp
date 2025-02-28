@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.io.IOException
 import javax.inject.Inject
 
 interface GetMovieDetailsUseCase {
@@ -39,7 +38,7 @@ class GetMovieDetailsUseCaseImpl @Inject constructor(
                 emit(ResultData.Success(moviesSimilar to movieDetails))
             } catch (e: HttpException) {
                 emit(ResultData.Failure(e))
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 emit(ResultData.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
