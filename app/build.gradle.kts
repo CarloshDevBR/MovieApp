@@ -28,7 +28,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.movietmdbapp.HiltTestRunner"
 
         buildConfigField("String", "API_KEY", "\"${apiKeyProperties["API_KEY"]}\"")
         buildConfigField("String", "BASE_URL", "\"${apiKeyProperties["BASE_URL"]}\"")
@@ -49,11 +50,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "18"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -79,20 +80,43 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Instrumentation Tests
+    val hiltTestVersion = "2.51.1"
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltTestVersion")
+
+    kaptAndroidTest("com.google.dagger:hilt-compiler:$hiltTestVersion")
+
+    // Unit Tests
+    testImplementation("com.google.dagger:hilt-android-testing:$hiltTestVersion")
+
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+
+    testImplementation("androidx.room:room-testing:2.6.1")
+
+    testImplementation("io.mockk:mockk:1.13.5")
+
+    kaptTest("com.google.dagger:hilt-compiler:$hiltTestVersion")
+
+    // Truth
+    val truthVersion = "1.4.2"
+    implementation("com.google.truth:truth:$truthVersion")
+    androidTestImplementation("com.google.truth:truth:$truthVersion")
+
     // Compose dependencies
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.compose.material:material-icons-extended:1.7.5")
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
     implementation("com.google.accompanist:accompanist-flowlayout:0.36.0")
-    implementation("androidx.navigation:navigation-compose:2.8.4")
+    implementation("androidx.navigation:navigation-compose:2.8.7")
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.7.0")
 
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")
-
-    // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     // Splashscreen
     implementation("androidx.core:core-splashscreen:1.0.1")
@@ -106,11 +130,12 @@ dependencies {
     implementation("androidx.paging:paging-compose:$pagingVersion")
 
     // okHttp3
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    val okHttpVersion = "4.12.0"
+    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
     // Retrofit
