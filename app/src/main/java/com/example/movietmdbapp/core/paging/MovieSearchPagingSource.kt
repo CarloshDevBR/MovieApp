@@ -2,11 +2,8 @@ package com.example.movietmdbapp.core.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import coil.network.HttpException
 import com.example.movietmdbapp.core.domain.model.MovieSearch
-import com.example.movietmdbapp.search_movie_feature.data.mapper.toMovieSearch
 import com.example.movietmdbapp.search_movie_feature.domain.source.MovieSearchRemoteDataSource
-import java.io.IOException
 
 class MovieSearchPagingSource(
     private val query: String,
@@ -27,19 +24,17 @@ class MovieSearchPagingSource(
 
             val response = remoteDataSource.getSearchMovies(page = pageNumber, query = query)
 
-            val movies = response.results
+            val movies = response.movies
+
+            val totalPages = response.totalPages
 
             LoadResult.Page(
-                data = movies.toMovieSearch(),
+                data = movies,
                 prevKey = if (pageNumber == 1) null else pageNumber - 1,
-                nextKey = if (movies.isEmpty()) null else pageNumber + 1,
+                nextKey = if (pageNumber == totalPages) null else pageNumber + 1,
             )
 
-        } catch (exception: IOException) {
-            exception.printStackTrace()
-
-            return LoadResult.Error(exception)
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             exception.printStackTrace()
 
             return LoadResult.Error(exception)

@@ -67,6 +67,8 @@ class MovieDetailViewModelTest {
     fun `must notify uiState with Success when get movies similar and movie details returns success`() =
         runTest {
             // Given
+            coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(true))
+
             every { getMovieDetailsUseCase.invoke(any()) } returns flowOf(
                 ResultData.Success(flowOf(pagingData) to movieDetailsFactory)
             )
@@ -95,6 +97,8 @@ class MovieDetailViewModelTest {
     fun `must notify uiState with Failure when get movies details and returns exceptions`() =
         runTest {
             // Given
+            coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(true))
+
             val exception = Exception("erro")
 
             every { getMovieDetailsUseCase.invoke(any()) } returns flowOf(
@@ -115,6 +119,8 @@ class MovieDetailViewModelTest {
     @Test
     fun `must add movie to favorite and update uiState correctly`() = runTest {
         // Given
+        coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(false))
+
         every { getMovieDetailsUseCase.invoke(any()) } returns flowOf(
             ResultData.Success(flowOf(pagingData) to movieDetailsFactory)
         )
@@ -141,7 +147,7 @@ class MovieDetailViewModelTest {
 
         coEvery { deleteMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(Unit))
 
-        coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(true))
+        coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(false))
 
         // When
         viewModel.onAddFavorite(movie)
@@ -154,5 +160,47 @@ class MovieDetailViewModelTest {
         coVerify { deleteMovieFavoriteUseCase.invoke(DeleteMovieFavoriteUseCase.Params(movie)) }
 
         assertThat(Color.White).isEqualTo(viewModel.uiState.iconColor)
+    }
+
+    @Test
+    fun `must notify uiState with bookmark icon filled in if bookmark check returns true`() {
+        // Given
+        coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(true))
+
+        val slot = slot<IsMovieFavoriteUseCase.Params>()
+
+        // When
+        viewModel.uiState.isLoading
+
+        coVerify { isMovieFavoriteUseCase.invoke(capture(slot)) }
+
+        val capturedValue = slot.captured
+
+        assertThat(movie.id).isEqualTo(capturedValue.movieId)
+
+        val iconColor = viewModel.uiState.iconColor
+
+        assertThat(Color.Red).isEqualTo(iconColor)
+    }
+
+    @Test
+    fun `must notify uiState with bookmark icon filled in if bookmark check returns false`() {
+        // Given
+        coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(false))
+
+        val slot = slot<IsMovieFavoriteUseCase.Params>()
+
+        // When
+        viewModel.uiState.isLoading
+
+        coVerify { isMovieFavoriteUseCase.invoke(capture(slot)) }
+
+        val capturedValue = slot.captured
+
+        assertThat(movie.id).isEqualTo(capturedValue.movieId)
+
+        val iconColor = viewModel.uiState.iconColor
+
+        assertThat(Color.White).isEqualTo(iconColor)
     }
 }

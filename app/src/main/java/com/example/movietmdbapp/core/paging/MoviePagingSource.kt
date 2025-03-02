@@ -2,11 +2,8 @@ package com.example.movietmdbapp.core.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import coil.network.HttpException
 import com.example.movietmdbapp.core.domain.model.Movie
-import com.example.movietmdbapp.movie_popular_feature.data.mapper.toMovie
 import com.example.movietmdbapp.movie_popular_feature.domain.source.MoviePopularRemoteDataSource
-import java.io.IOException
 
 class MoviePagingSource(
     private val remoteDataSource: MoviePopularRemoteDataSource
@@ -23,20 +20,18 @@ class MoviePagingSource(
         return try {
             val pageNumber = params.key ?: 1
 
-            val response = remoteDataSource.getPopularMovies(page = pageNumber)
+            val moviePaging = remoteDataSource.getPopularMovies(page = pageNumber)
 
-            val movies = response.results
+            val movies = moviePaging.movies
+
+            val totalPages = moviePaging.totalPages
 
             LoadResult.Page(
-                data = movies.toMovie(),
+                data = movies,
                 prevKey = if (pageNumber == 1) null else pageNumber - 1,
-                nextKey = if (movies.isEmpty()) null else pageNumber + 1
+                nextKey = if (totalPages == totalPages) null else pageNumber + 1
             )
-        } catch (exception: IOException) {
-            exception.printStackTrace()
-
-            return LoadResult.Error(exception)
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             exception.printStackTrace()
 
             return LoadResult.Error(exception)
