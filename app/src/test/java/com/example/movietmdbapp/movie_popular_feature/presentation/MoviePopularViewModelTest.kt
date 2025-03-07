@@ -35,7 +35,7 @@ class MoviePopularViewModelTest {
     @Test
     fun `must validate paging data object values when calling paging data from movies`() = runTest {
         // Given
-        every { getPopularMoviesUseCase.invoke() } returns flowOf(fakePagingDataMovies)
+        every { getPopularMoviesUseCase.invoke(any()) } returns flowOf(fakePagingDataMovies)
 
         // When
         val result = viewModel.uiState.movies.first()
@@ -47,7 +47,7 @@ class MoviePopularViewModelTest {
     @Test(expected = RuntimeException::class)
     fun `must throw an exception when the calling to the use case returns an exception`() = runTest {
             // Given
-            every { getPopularMoviesUseCase.invoke() } throws RuntimeException()
+            every { getPopularMoviesUseCase.invoke(any()) } throws RuntimeException()
 
             // When
             val result = viewModel.uiState.movies.first()

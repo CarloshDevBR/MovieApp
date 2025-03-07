@@ -17,7 +17,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -69,9 +68,12 @@ class MovieDetailViewModelTest {
             // Given
             coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(true))
 
-            every { getMovieDetailsUseCase.invoke(any()) } returns flowOf(
-                ResultData.Success(flowOf(pagingData) to movieDetailsFactory)
+            coEvery { getMovieDetailsUseCase.invoke(any()) } returns ResultData.Success(
+                flowOf(
+                    pagingData
+                ) to movieDetailsFactory
             )
+
 
             val slot = slot<GetMovieDetailsUseCase.Params>()
 
@@ -79,7 +81,7 @@ class MovieDetailViewModelTest {
             viewModel.uiState.isLoading
 
             // Then
-            verify { getMovieDetailsUseCase.invoke(capture(slot)) }
+            coVerify { getMovieDetailsUseCase.invoke(capture(slot)) }
 
             val capturedValue = slot.captured
 
@@ -101,11 +103,7 @@ class MovieDetailViewModelTest {
 
             val exception = Exception("erro")
 
-            every { getMovieDetailsUseCase.invoke(any()) } returns flowOf(
-                ResultData.Failure(
-                    exception
-                )
-            )
+            coEvery { getMovieDetailsUseCase.invoke(any()) } returns ResultData.Failure(exception)
 
             // When
             viewModel.uiState.isLoading
@@ -121,8 +119,10 @@ class MovieDetailViewModelTest {
         // Given
         coEvery { isMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(false))
 
-        every { getMovieDetailsUseCase.invoke(any()) } returns flowOf(
-            ResultData.Success(flowOf(pagingData) to movieDetailsFactory)
+        coEvery { getMovieDetailsUseCase.invoke(any()) } returns ResultData.Success(
+            flowOf(
+                pagingData
+            ) to movieDetailsFactory
         )
 
         coEvery { addMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(Unit))
@@ -139,8 +139,10 @@ class MovieDetailViewModelTest {
     @Test
     fun `must remove the movie from favorites and update the uiState correctly`() = runTest {
         // Given
-        every { getMovieDetailsUseCase.invoke(any()) } returns flowOf(
-            ResultData.Success(flowOf(pagingData) to movieDetailsFactory)
+        coEvery { getMovieDetailsUseCase.invoke(any()) } returns ResultData.Success(
+            flowOf(
+                pagingData
+            ) to movieDetailsFactory
         )
 
         coEvery { addMovieFavoriteUseCase.invoke(any()) } returns flowOf(ResultData.Success(Unit))

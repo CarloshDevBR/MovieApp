@@ -20,9 +20,13 @@ class DeleteMovieFavoriteUseCaseImpl @Inject constructor(
 ) : DeleteMovieFavoriteUseCase {
     override suspend fun invoke(params: DeleteMovieFavoriteUseCase.Params): Flow<ResultData<Unit>> {
         return flow {
-            val delete = repository.delete(params.movie)
+            try {
+                val delete = repository.delete(params.movie)
 
-            emit(ResultData.Success(delete))
+                emit(ResultData.Success(delete))
+            } catch (e: Exception) {
+                emit(ResultData.Failure(e))
+            }
         }.flowOn(Dispatchers.IO)
     }
 }

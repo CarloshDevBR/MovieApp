@@ -1,46 +1,46 @@
 package com.example.movietmdbapp.movie_detail_feature.domain.usecase
 
+import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import coil.network.HttpException
 import com.example.movietmdbapp.core.domain.model.Movie
 import com.example.movietmdbapp.core.domain.model.MovieDetails
 import com.example.movietmdbapp.core.util.ResultData
 import com.example.movietmdbapp.movie_detail_feature.domain.repository.MovieDetailsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface GetMovieDetailsUseCase {
-    operator fun invoke(params: Params): Flow<ResultData<Pair<Flow<PagingData<Movie>>, MovieDetails>>>
+    suspend operator fun invoke(params: Params): ResultData<Pair<Flow<PagingData<Movie>>, MovieDetails>>
 
-    data class Params(val movieId: Int)
+    data class Params(val movieId: Int, val pagingConfig: PagingConfig)
 }
 
 class GetMovieDetailsUseCaseImpl @Inject constructor(
     private val repository: MovieDetailsRepository
 ) : GetMovieDetailsUseCase {
-    override fun invoke(params: GetMovieDetailsUseCase.Params): Flow<ResultData<Pair<Flow<PagingData<Movie>>, MovieDetails>>> {
-        return flow {
+    override suspend fun invoke(params: GetMovieDetailsUseCase.Params): ResultData<Pair<Flow<PagingData<Movie>>, MovieDetails>> {
+        return withContext(Dispatchers.IO) {
+            ResultData.Loading
+
             try {
-                emit(ResultData.Loading)
+                val pagingSource = repository.getMoviesSimilar(movieId = params.movieId)
 
-                val movieDetails = repository.getMovieDetails(params.movieId)
-                val moviesSimilar = repository.getMoviesSimilar(
-                    movieId = params.movieId, pagingConfig = PagingConfig(
-                        pageSize = 20,
-                        initialLoadSize = 20
-                    )
-                )
+                val movieDetails = repository.getMovieDetails(movieId = params.movieId)
 
-                emit(ResultData.Success(moviesSimilar to movieDetails))
-            } catch (e: HttpException) {
-                emit(ResultData.Failure(e))
+                val pager = Pager(
+                    config = params.pagingConfig,
+                    pagingSourceFactory = {
+                        pagingSource
+                    }
+                ).flow
+
+                ResultData.Success(pager to movieDetails)
             } catch (e: Exception) {
-                emit(ResultData.Failure(e))
+                ResultData.Failure(e)
             }
-        }.flowOn(Dispatchers.IO)
+        }
     }
 }
